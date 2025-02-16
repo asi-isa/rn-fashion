@@ -1,6 +1,8 @@
+import React from "react";
+import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
 
 import {
   createStaticNavigation,
@@ -59,5 +61,9 @@ export default function App() {
     return null;
   }
 
-  return <Navigation />;
+  return (
+    <GestureHandlerRootView>
+      <Navigation />
+    </GestureHandlerRootView>
+  );
 }
