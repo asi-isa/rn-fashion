@@ -1,20 +1,63 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import {
+  createStaticNavigation,
+  type StaticParamList,
+} from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+import { HomeScreen } from "./src/screens/home";
+import { AboutScreen } from "./src/screens/about";
+import { OnboardingScreen } from "./src/screens/authentication";
+
+SplashScreen.preventAutoHideAsync();
+
+const RootStack = createNativeStackNavigator({
+  initialRouteName: "Onboarding",
+  screenOptions: {
+    headerShown: false,
+  },
+  groups: {
+    App: {
+      screens: {
+        Home: HomeScreen,
+        About: AboutScreen,
+      },
+    },
+    Authentication: {
+      screens: {
+        Onboarding: OnboardingScreen,
+      },
+    },
   },
 });
+
+type RootStackParamList = StaticParamList<typeof RootStack>;
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootStackParamList {}
+  }
+}
+
+const Navigation = createStaticNavigation(RootStack);
+
+export default function App() {
+  const [loaded, error] = useFonts({
+    Montserrat: require("./assets/fonts/Montserrat-VariableFont.ttf"),
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
+
+  return <Navigation />;
+}
