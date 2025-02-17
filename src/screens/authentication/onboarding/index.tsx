@@ -12,6 +12,7 @@ import { Constants } from "@/constants";
 
 import { Slide, SLIDE_HEIGHT, SlideProps } from "./slide";
 import { FooterSlide, FooterSlideProps } from "./footer-slide";
+import { Dot } from "./dot";
 
 type FullSlide = SlideProps & Omit<FooterSlideProps, "onPress">;
 
@@ -101,29 +102,39 @@ export const OnboardingScreen = () => {
             backgroundColor,
           }}
         />
-        <Animated.View
-          style={[
-            styles.footerContent,
-            { width: Constants.WINDOW_WIDTH * slides.length },
-            { transform: [{ translateX: footerTranslateX }] },
-          ]}
-        >
-          {slides.map((slide, index) => (
-            <FooterSlide
-              key={index}
-              {...slide}
-              onPress={() => {
-                if (scrollRef.current) {
-                  scrollRef.current.scrollTo({
-                    x: (index + 1) * Constants.WINDOW_WIDTH,
-                    animated: true,
-                  });
-                }
-              }}
-              lastSlide={index === slides.length - 1}
-            />
-          ))}
-        </Animated.View>
+
+        <View style={styles.footerContent}>
+          <View style={styles.pagination}>
+            {slides.map((_, index) => (
+              <Dot key={index} index={index} scrollX={scrollX} />
+            ))}
+          </View>
+
+          <Animated.View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              width: Constants.WINDOW_WIDTH * slides.length,
+              transform: [{ translateX: footerTranslateX }],
+            }}
+          >
+            {slides.map((slide, index) => (
+              <FooterSlide
+                key={index}
+                {...slide}
+                onPress={() => {
+                  if (scrollRef.current) {
+                    scrollRef.current.scrollTo({
+                      x: (index + 1) * Constants.WINDOW_WIDTH,
+                      animated: true,
+                    });
+                  }
+                }}
+                lastSlide={index === slides.length - 1}
+              />
+            ))}
+          </Animated.View>
+        </View>
       </View>
     </View>
   );
@@ -143,8 +154,22 @@ const styles = StyleSheet.create({
   },
   footerContent: {
     flex: 1,
-    flexDirection: "row",
     backgroundColor: "white",
     borderTopLeftRadius: RADIUS,
+  },
+  pagination: {
+    ...StyleSheet.absoluteFillObject,
+    width: Constants.WINDOW_WIDTH,
+    height: RADIUS,
+    flexDirection: "row",
+    gap: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  paginationDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "black",
   },
 });
