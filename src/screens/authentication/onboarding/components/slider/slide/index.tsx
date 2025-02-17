@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 import { Constants } from "@/constants";
+import { Text } from "@/components/text";
 
 export interface SlideProps {
   title: string;
@@ -28,7 +29,7 @@ export const Slide = ({ title, alignment = "left" }: SlideProps) => {
   return (
     <View style={styles.container}>
       <View style={[styles.titleContainer, { transform }]}>
-        <Text style={styles.title}>{title}</Text>
+        <Text variant="hero">{title}</Text>
       </View>
     </View>
   );
@@ -41,13 +42,5 @@ const styles = StyleSheet.create({
   titleContainer: {
     height: 100,
     justifyContent: "center",
-  },
-  title: {
-    fontFamily: "Montserrat",
-    fontSize: 80,
-    lineHeight: 80,
-    fontWeight: "600",
-    color: "white",
-    textAlign: "center",
   },
 });

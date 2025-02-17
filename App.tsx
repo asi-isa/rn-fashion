@@ -9,10 +9,12 @@ import {
   type StaticParamList,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { ThemeProvider } from "@shopify/restyle";
 
+import { theme } from "./src/theme";
 import { HomeScreen } from "./src/screens/home";
 import { AboutScreen } from "./src/screens/about";
-import { OnboardingScreen } from "./src/screens/authentication";
+import { OnboardingScreen, WelcomeScreen } from "./src/screens/authentication";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,6 +33,7 @@ const RootStack = createNativeStackNavigator({
     Authentication: {
       screens: {
         Onboarding: OnboardingScreen,
+        Welcome: WelcomeScreen,
       },
     },
   },
@@ -63,7 +66,9 @@ export default function App() {
 
   return (
     <GestureHandlerRootView>
-      <Navigation />
+      <ThemeProvider theme={theme}>
+        <Navigation />
+      </ThemeProvider>
     </GestureHandlerRootView>
   );
 }

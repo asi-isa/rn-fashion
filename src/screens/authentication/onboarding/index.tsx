@@ -4,7 +4,7 @@ import { Slider } from "./components/slider";
 import { Footer } from "./components/footer";
 import { useOnboardingAnimation } from "./hooks/useOnboardingAnimation";
 import { slides } from "./data";
-import { RADIUS } from "./constants";
+import { theme } from "@/theme";
 
 export const OnboardingScreen = () => {
   const { scrollRef, scrollX, onScroll, backgroundColor, footerTranslateX } =
@@ -17,7 +17,7 @@ export const OnboardingScreen = () => {
         scrollRef={scrollRef}
         onScroll={onScroll}
         backgroundColor={backgroundColor}
-        radius={RADIUS}
+        radius={theme.borderRadius.xxl}
       />
       <Footer
         slides={slides}
@@ -25,7 +25,7 @@ export const OnboardingScreen = () => {
         scrollX={scrollX}
         backgroundColor={backgroundColor}
         footerTranslateX={footerTranslateX}
-        radius={RADIUS}
+        radius={theme.borderRadius.xxl}
       />
     </View>
   );

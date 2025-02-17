@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 import { Button } from "@/components/button";
-
+import { Text } from "@/components/text";
 export interface FooterSlideProps {
   footerTitle: string;
   footerDescription: string;
@@ -17,8 +17,12 @@ export const FooterSlide = ({
 }: FooterSlideProps) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{footerTitle}</Text>
-      <Text style={styles.description}>{footerDescription}</Text>
+      <Text variant="title2" style={styles.title}>
+        {footerTitle}
+      </Text>
+      <Text variant="body" style={styles.description}>
+        {footerDescription}
+      </Text>
       <Button
         label={lastSlide ? "Let's get started" : "Next"}
         variant={lastSlide ? "primary" : "default"}
@@ -36,20 +40,10 @@ const styles = StyleSheet.create({
     padding: 44,
   },
   title: {
-    fontSize: 24,
-    lineHeight: 30,
-    fontWeight: "600",
-    textAlign: "center",
-    fontFamily: "Montserrat",
-    color: "#0C0D34",
     marginBottom: 12,
   },
   description: {
-    fontSize: 16,
-    lineHeight: 24,
     textAlign: "center",
-    fontFamily: "Montserrat",
-    color: "#0C0D34",
     marginBottom: 40,
   },
 });
