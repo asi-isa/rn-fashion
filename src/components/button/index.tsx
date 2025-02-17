@@ -8,7 +8,7 @@ import { Text } from "@/components/text";
 
 interface ButtonProps {
   label: string;
-  variant: "primary" | "default";
+  variant: "primary" | "default" | "link";
   onPress: () => void;
 }
 
@@ -18,15 +18,35 @@ export const Button = ({
   onPress,
 }: ButtonProps) => {
   const theme = useTheme<Theme>();
-  const backgroundColor =
-    variant === "primary" ? theme.colors.accent : theme.colors.foreground05;
-  const color = variant === "primary" ? "background" : "foreground";
+
+  let backgroundColor: keyof Theme["colors"];
+  let color: keyof Theme["colors"];
+  switch (variant) {
+    case "primary":
+      backgroundColor = "accent";
+      color = "background";
+      break;
+
+    case "link":
+      backgroundColor = "transparent";
+      color = "foreground";
+      break;
+
+    default:
+      backgroundColor = "foreground05";
+      color = "foreground";
+      break;
+  }
+
   return (
     <RectButton
       onPress={onPress}
       style={[
         styles.container,
-        { backgroundColor, borderColor: backgroundColor },
+        {
+          backgroundColor: theme.colors[backgroundColor],
+          borderColor: theme.colors[backgroundColor],
+        },
       ]}
     >
       <View accessible accessibilityRole="button">

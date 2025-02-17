@@ -5,6 +5,7 @@ import { Constants } from "@/constants";
 import { Dot } from "./dot";
 import { FooterSlide } from "./footer-slide";
 import { FullSlide, OnboardingAnimation } from "../../types";
+import { useNavigation } from "@react-navigation/native";
 
 interface FooterProps {
   slides: FullSlide[];
@@ -23,6 +24,7 @@ export const Footer = ({
   footerTranslateX,
   radius,
 }: FooterProps) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.footer}>
       <Animated.View
@@ -47,21 +49,27 @@ export const Footer = ({
             transform: [{ translateX: footerTranslateX }],
           }}
         >
-          {slides.map((slide, index) => (
-            <FooterSlide
-              key={index}
-              {...slide}
-              onPress={() => {
-                if (scrollRef.current) {
-                  scrollRef.current.scrollTo({
-                    x: (index + 1) * Constants.WINDOW_WIDTH,
-                    animated: true,
-                  });
-                }
-              }}
-              lastSlide={index === slides.length - 1}
-            />
-          ))}
+          {slides.map((slide, index) => {
+            const isLastSlide = index === slides.length - 1;
+            return (
+              <FooterSlide
+                key={index}
+                {...slide}
+                onPress={() => {
+                  if (isLastSlide) {
+                    // @ts-ignore
+                    navigation.replace("Welcome");
+                  } else {
+                    scrollRef.current?.scrollTo({
+                      x: (index + 1) * Constants.WINDOW_WIDTH,
+                      animated: true,
+                    });
+                  }
+                }}
+                lastSlide={isLastSlide}
+              />
+            );
+          })}
         </Animated.View>
       </View>
     </View>

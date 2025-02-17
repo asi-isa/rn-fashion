@@ -4,11 +4,14 @@ const palette = {
   black: "#0B0B0B",
   white: "#fff",
 
+  lightGray: "#F4F0EF",
+
   navy: "#0C0D34",
   navy70: "rgba(12, 13, 52, 0.7)",
   navy05: "rgba(12, 13, 52, 0.05)",
 
   teal: "#2CB9B0",
+  transparent: "transparent",
 };
 
 export const theme = createTheme({
@@ -18,6 +21,8 @@ export const theme = createTheme({
     foreground70: palette.navy70,
     foreground05: palette.navy05,
     accent: palette.teal,
+    lightGray: palette.lightGray,
+    transparent: palette.transparent,
   },
   spacing: {
     s: 8,
@@ -25,7 +30,7 @@ export const theme = createTheme({
     l: 24,
     xl: 40,
   },
-  borderRadius: {
+  borderRadii: {
     s: 4,
     m: 10,
     l: 25,
@@ -64,7 +69,7 @@ export const theme = createTheme({
     label: {
       fontSize: 16,
       lineHeight: 18,
-      fontWeight: "400",
+      fontWeight: "500",
       color: "foreground",
       fontFamily: "Montserrat",
     },

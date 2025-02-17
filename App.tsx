@@ -12,8 +12,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ThemeProvider } from "@shopify/restyle";
 
 import { theme } from "./src/theme";
-import { HomeScreen } from "./src/screens/home";
-import { AboutScreen } from "./src/screens/about";
 import { OnboardingScreen, WelcomeScreen } from "./src/screens/authentication";
 
 SplashScreen.preventAutoHideAsync();
@@ -24,12 +22,6 @@ const RootStack = createNativeStackNavigator({
     headerShown: false,
   },
   groups: {
-    App: {
-      screens: {
-        Home: HomeScreen,
-        About: AboutScreen,
-      },
-    },
     Authentication: {
       screens: {
         Onboarding: OnboardingScreen,
