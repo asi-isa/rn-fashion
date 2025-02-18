@@ -1,5 +1,5 @@
 import { useTheme } from "@shopify/restyle";
-import { View, StyleSheet } from "react-native";
+import { View, StyleProp, ViewStyle, TextStyle } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 
 import { Theme } from "@/theme";
@@ -10,12 +10,18 @@ interface ButtonProps {
   label: string;
   variant: "primary" | "default" | "link";
   onPress: () => void;
+  children?: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
 }
 
 export const Button = ({
   label,
   variant = "default",
   onPress,
+  children,
+  style,
+  textStyle,
 }: ButtonProps) => {
   const theme = useTheme<Theme>();
 
@@ -42,29 +48,31 @@ export const Button = ({
     <RectButton
       onPress={onPress}
       style={[
-        styles.container,
         {
+          padding: variant === "link" ? 0 : 16,
+          borderRadius: variant === "link" ? 0 : 24,
+          height: variant === "link" ? "auto" : 50,
+          width: variant === "link" ? "auto" : 245,
+          justifyContent: "center",
+          alignItems: "center",
           backgroundColor: theme.colors[backgroundColor],
           borderColor: theme.colors[backgroundColor],
         },
+        style,
       ]}
+      underlayColor={
+        variant === "link" ? "transparent" : theme.colors[backgroundColor]
+      }
     >
       <View accessible accessibilityRole="button">
-        <Text variant="label" color={color}>
-          {label}
-        </Text>
+        {children ? (
+          children
+        ) : (
+          <Text variant="label" color={color} style={textStyle}>
+            {label}
+          </Text>
+        )}
       </View>
     </RectButton>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    borderRadius: 24,
-    height: 50,
-    width: 245,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

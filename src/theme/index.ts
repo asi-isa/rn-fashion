@@ -1,14 +1,17 @@
-import { createTheme } from "@shopify/restyle";
+import { createTheme, useTheme as useRestyleTheme } from "@shopify/restyle";
 
 const palette = {
   black: "#0B0B0B",
   white: "#fff",
 
   lightGray: "#F4F0EF",
+  darkGray: "#8A8D90",
 
   navy: "#0C0D34",
   navy70: "rgba(12, 13, 52, 0.7)",
+  navy50: "rgba(12, 13, 52, 0.5)",
   navy05: "rgba(12, 13, 52, 0.05)",
+  red: "#FF0000",
 
   teal: "#2CB9B0",
   transparent: "transparent",
@@ -19,10 +22,13 @@ export const theme = createTheme({
     background: palette.white,
     foreground: palette.navy,
     foreground70: palette.navy70,
+    foreground50: palette.navy50,
     foreground05: palette.navy05,
     accent: palette.teal,
     lightGray: palette.lightGray,
+    darkGray: palette.darkGray,
     transparent: palette.transparent,
+    error: palette.red,
   },
   spacing: {
     s: 8,
@@ -31,11 +37,13 @@ export const theme = createTheme({
     xl: 40,
   },
   borderRadii: {
+    none: 0,
     s: 4,
     m: 10,
     l: 25,
     xl: 40,
     xxl: 75,
+    full: 9999,
   },
   textVariants: {
     hero: {
@@ -50,6 +58,7 @@ export const theme = createTheme({
       fontFamily: "Montserrat",
       fontWeight: "500",
       fontSize: 28,
+      lineHeight: 38,
       color: "foreground",
     },
     title2: {
@@ -73,11 +82,18 @@ export const theme = createTheme({
       color: "foreground",
       fontFamily: "Montserrat",
     },
-
     defaults: {
-      // We can define a default text variant here.
+      fontFamily: "Montserrat",
+      fontWeight: "400",
+      fontSize: 16,
+      lineHeight: 24,
+      color: "foreground50",
     },
   },
 });
 
 export type Theme = typeof theme;
+
+export const useTheme = () => {
+  return useRestyleTheme<Theme>();
+};

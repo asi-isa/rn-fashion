@@ -1,9 +1,11 @@
+import { useNavigation } from "@react-navigation/native";
+
 import { Box } from "@/components/box";
-import { StyleSheet } from "react-native";
 import { Text } from "@/components/text";
 import { Button } from "@/components/button";
 
 export const WelcomeScreen = () => {
+  const navigation = useNavigation();
   return (
     <Box flex={1} backgroundColor="background">
       <Box
@@ -44,7 +46,9 @@ export const WelcomeScreen = () => {
             <Button
               label="Have an account? Log in"
               variant="primary"
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate("Login");
+              }}
             />
             <Button
               label="Join us, it's free"
@@ -62,5 +66,3 @@ export const WelcomeScreen = () => {
     </Box>
   );
 };
-
-const styles = StyleSheet.create({});
