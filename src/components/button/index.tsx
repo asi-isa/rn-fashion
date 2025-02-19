@@ -1,8 +1,7 @@
-import { useTheme } from "@shopify/restyle";
 import { View, StyleProp, ViewStyle, TextStyle } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 
-import { Theme } from "@/theme";
+import { useTheme } from "@/theme";
 
 import { Text } from "@/components/text";
 
@@ -23,10 +22,10 @@ export const Button = ({
   style,
   textStyle,
 }: ButtonProps) => {
-  const theme = useTheme<Theme>();
+  const theme = useTheme();
 
-  let backgroundColor: keyof Theme["colors"];
-  let color: keyof Theme["colors"];
+  let backgroundColor: keyof typeof theme.colors;
+  let color: keyof typeof theme.colors;
   switch (variant) {
     case "primary":
       backgroundColor = "accent";

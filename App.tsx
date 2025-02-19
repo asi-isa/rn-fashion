@@ -3,15 +3,13 @@ import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-
 import {
   createStaticNavigation,
   type StaticParamList,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { ThemeProvider } from "@shopify/restyle";
 
-import { theme } from "./src/theme";
+import { ThemeProvider } from "@/theme";
 import { screens as AuthenticationScreens } from "./src/screens/authentication";
 
 SplashScreen.preventAutoHideAsync();
@@ -55,7 +53,7 @@ export default function App() {
 
   return (
     <GestureHandlerRootView>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider>
         <Navigation />
       </ThemeProvider>
     </GestureHandlerRootView>

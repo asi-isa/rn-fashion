@@ -1,4 +1,8 @@
-import { createTheme, useTheme as useRestyleTheme } from "@shopify/restyle";
+import {
+  createTheme,
+  useTheme as useRestyleTheme,
+  ThemeProvider as RestyleThemeProvider,
+} from "@shopify/restyle";
 
 const palette = {
   black: "#0B0B0B",
@@ -96,4 +100,8 @@ export type Theme = typeof theme;
 
 export const useTheme = () => {
   return useRestyleTheme<Theme>();
+};
+
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  return <RestyleThemeProvider theme={theme}>{children}</RestyleThemeProvider>;
 };

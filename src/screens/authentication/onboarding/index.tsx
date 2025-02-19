@@ -4,9 +4,10 @@ import { Slider } from "./components/slider";
 import { Footer } from "./components/footer";
 import { useOnboardingAnimation } from "./hooks/useOnboardingAnimation";
 import { slides } from "./data";
-import { theme } from "@/theme";
+import { useTheme } from "@/theme";
 
 export const OnboardingScreen = () => {
+  const theme = useTheme();
   const { scrollRef, scrollX, onScroll, backgroundColor, footerTranslateX } =
     useOnboardingAnimation(slides);
 

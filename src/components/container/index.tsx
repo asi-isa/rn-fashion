@@ -1,10 +1,10 @@
+import { StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 
 import { Box } from "@/components/box";
 import { Constants } from "@/constants";
-import { theme } from "@/theme";
-import { StyleSheet } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTheme } from "@/theme";
 
 export const patterns = [require("@/../assets/images/patterns/pattern2.jpg")];
 const aspectRatio = 753 / 1128;
@@ -17,6 +17,7 @@ interface ContainerProps {
 }
 
 export const Container = ({ children, footer }: ContainerProps) => {
+  const theme = useTheme();
   const insets = useSafeAreaInsets();
   return (
     <Box flex={1} backgroundColor="foreground">
