@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import {
   NativeSyntheticEvent,
   TextInput as RNTextInput,
@@ -21,86 +21,86 @@ interface TextInputProps extends RNTextInputProps {
   touched?: boolean;
 }
 
-export const TextInput = ({
-  icon,
-  placeholder,
-  onChangeText,
-  onBlur,
-  error,
-  touched,
-  ...props
-}: TextInputProps) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const theme = useTheme();
+export const TextInput = forwardRef<RNTextInput, TextInputProps>(
+  (
+    { icon, placeholder, onChangeText, onBlur, error, touched, ...props },
+    ref
+  ) => {
+    const [isFocused, setIsFocused] = useState(false);
+    const theme = useTheme();
 
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-    setIsFocused(false);
-    onBlur(event);
-  };
+    const handleFocus = () => setIsFocused(true);
+    const handleBlur = (
+      event: NativeSyntheticEvent<TextInputFocusEventData>
+    ) => {
+      setIsFocused(false);
+      onBlur(event);
+    };
 
-  const reColor =
-    touched && error ? "error" : isFocused ? "accent" : "darkGray";
-  const color = theme.colors[reColor];
+    const reColor =
+      touched && error ? "error" : isFocused ? "accent" : "darkGray";
+    const color = theme.colors[reColor];
 
-  return (
-    <Box flexDirection="column" gap="s">
-      <Box
-        flexDirection="row"
-        gap="s"
-        borderWidth={1}
-        height={48}
-        alignItems="center"
-        borderRadius="s"
-        paddingHorizontal="m"
-        borderColor={reColor}
-      >
-        <Box>
-          <Feather name={icon} size={20} color={color} />
-        </Box>
-
-        <RNTextInput
-          placeholder={placeholder}
-          placeholderTextColor={theme.colors.darkGray}
-          underlineColorAndroid="transparent"
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          style={{
-            fontFamily: theme.textVariants.label.fontFamily,
-            fontSize: theme.textVariants.label.fontSize,
-            fontWeight: theme.textVariants.label
-              .fontWeight as TextStyle["fontWeight"],
-            flex: 1,
-          }}
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={onChangeText}
-          {...props}
-        />
-
+    return (
+      <Box flexDirection="column" gap="s">
         <Box
-          opacity={touched ? 1 : 0}
+          flexDirection="row"
+          gap="s"
+          borderWidth={1}
+          height={48}
           alignItems="center"
-          justifyContent="center"
-          width={20}
-          height={20}
-          borderRadius="full"
-          flexShrink={0}
-          backgroundColor={touched && error ? "error" : "accent"}
+          borderRadius="s"
+          paddingHorizontal="m"
+          borderColor={reColor}
         >
-          <Feather
-            name={error ? "alert-circle" : "check"}
-            size={10}
-            color="white"
-          />
-        </Box>
-      </Box>
+          <Box>
+            <Feather name={icon} size={20} color={color} />
+          </Box>
 
-      {touched && error && (
-        <Text variant="label" color="error">
-          {error}
-        </Text>
-      )}
-    </Box>
-  );
-};
+          <RNTextInput
+            ref={ref}
+            placeholder={placeholder}
+            placeholderTextColor={theme.colors.darkGray}
+            underlineColorAndroid="transparent"
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            style={{
+              fontFamily: theme.textVariants.label.fontFamily,
+              fontSize: theme.textVariants.label.fontSize,
+              fontWeight: theme.textVariants.label
+                .fontWeight as TextStyle["fontWeight"],
+              flex: 1,
+            }}
+            autoCapitalize="none"
+            autoCorrect={false}
+            onChangeText={onChangeText}
+            {...props}
+          />
+
+          <Box
+            opacity={touched ? 1 : 0}
+            alignItems="center"
+            justifyContent="center"
+            width={20}
+            height={20}
+            borderRadius="full"
+            flexShrink={0}
+            backgroundColor={touched && error ? "error" : "accent"}
+          >
+            <Feather
+              name={error ? "alert-circle" : "check"}
+              size={10}
+              color="white"
+            />
+          </Box>
+        </Box>
+
+        {touched && error && (
+          <Text variant="label" color="error">
+            {error}
+          </Text>
+        )}
+      </Box>
+    );
+  }
+);
