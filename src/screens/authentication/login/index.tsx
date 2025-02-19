@@ -1,5 +1,4 @@
-import { Fragment } from "react";
-import { Formik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import { Box } from "@/components/box";
@@ -19,7 +18,17 @@ const loginSchema = Yup.object().shape({
   rememberMe: Yup.boolean().default(true),
 });
 
+const initialValues = loginSchema.getDefault();
+
 export const LoginScreen = () => {
+  const formik = useFormik({
+    initialValues,
+    validationSchema: loginSchema,
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
   return (
     <Box flex={1} backgroundColor="background">
       <Container footer={<Footer />}>
@@ -31,83 +40,63 @@ export const LoginScreen = () => {
             Use your credentials below and login to your account
           </Text>
 
-          <Formik
-            validationSchema={loginSchema}
-            initialValues={{ email: "", password: "", rememberMe: true }}
-            onSubmit={(values) => {
-              console.log(values);
-            }}
+          <Box flexDirection="column" gap="m" marginBottom="m" width="100%">
+            <TextInput
+              icon="mail"
+              placeholder="Enter your email"
+              touched={formik.touched.email}
+              onChangeText={formik.handleChange("email")}
+              onBlur={formik.handleBlur("email")}
+              error={formik.errors.email}
+              autoComplete="email"
+            />
+
+            <TextInput
+              icon="lock"
+              placeholder="Enter your password"
+              touched={formik.touched.password}
+              onChangeText={formik.handleChange("password")}
+              onBlur={formik.handleBlur("password")}
+              error={formik.errors.password}
+              autoComplete="current-password"
+            />
+          </Box>
+
+          <Box
+            flexDirection="row"
+            justifyContent="space-between"
+            width="100%"
+            marginBottom="xl"
           >
-            {(formik) => (
-              <Fragment>
-                <Box
-                  flexDirection="column"
-                  gap="m"
-                  marginBottom="m"
-                  width="100%"
-                >
-                  <TextInput
-                    icon="mail"
-                    placeholder="Enter your email"
-                    touched={formik.touched.email}
-                    onChangeText={formik.handleChange("email")}
-                    onBlur={formik.handleBlur("email")}
-                    error={formik.errors.email}
-                    autoComplete="email"
-                  />
+            <Checkbox
+              label="Remember me"
+              checked={formik.values.rememberMe}
+              onChange={() =>
+                formik.setFieldValue("rememberMe", !formik.values.rememberMe)
+              }
+            />
+            <Button
+              label="Forgot password?"
+              variant="link"
+              onPress={() => {
+                alert("login");
+              }}
+            >
+              <Text
+                variant="label"
+                color="accent"
+                textDecorationLine="underline"
+              >
+                Forgot password?
+              </Text>
+            </Button>
+          </Box>
 
-                  <TextInput
-                    icon="lock"
-                    placeholder="Enter your password"
-                    touched={formik.touched.password}
-                    onChangeText={formik.handleChange("password")}
-                    onBlur={formik.handleBlur("password")}
-                    error={formik.errors.password}
-                    autoComplete="current-password"
-                  />
-                </Box>
-
-                <Box
-                  flexDirection="row"
-                  justifyContent="space-between"
-                  width="100%"
-                  marginBottom="xl"
-                >
-                  <Checkbox
-                    label="Remember me"
-                    checked={formik.values.rememberMe}
-                    onChange={() =>
-                      formik.setFieldValue(
-                        "rememberMe",
-                        !formik.values.rememberMe
-                      )
-                    }
-                  />
-                  <Button
-                    label="Forgot password?"
-                    variant="link"
-                    onPress={() => {
-                      alert("login");
-                    }}
-                  >
-                    <Text
-                      variant="label"
-                      color="accent"
-                      textDecorationLine="underline"
-                    >
-                      Forgot password?
-                    </Text>
-                  </Button>
-                </Box>
-
-                <Button
-                  label="Log into your account"
-                  onPress={formik.handleSubmit}
-                  variant="primary"
-                />
-              </Fragment>
-            )}
-          </Formik>
+          <Button
+            label="Log into your account"
+            onPress={formik.handleSubmit}
+            variant="primary"
+          />
         </Box>
       </Container>
     </Box>
