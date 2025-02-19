@@ -1,48 +1,46 @@
 import { useState } from "react";
-import { TextInput as RNTextInput, TextStyle } from "react-native";
+import {
+  NativeSyntheticEvent,
+  TextInput as RNTextInput,
+  TextInputFocusEventData,
+  TextStyle,
+  TextInputProps as RNTextInputProps,
+} from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 
 import { useTheme } from "@/theme";
 import { Box } from "@/components/box";
 import { Text } from "@/components/text";
 
-const isNotEmpty = (text: string) => text.length > 0;
-
-interface TextInputProps {
+interface TextInputProps extends RNTextInputProps {
   icon: keyof typeof Feather.glyphMap;
   placeholder: string;
-  validator: (value: string) => string | null;
-  value: string;
   onChangeText: (text: string) => void;
+  onBlur: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+  error?: string;
+  touched?: boolean;
 }
 
 export const TextInput = ({
   icon,
   placeholder,
-  validator,
-  value,
   onChangeText,
+  onBlur,
+  error,
+  touched,
+  ...props
 }: TextInputProps) => {
+  const [isFocused, setIsFocused] = useState(false);
   const theme = useTheme();
 
-  const [error, setError] = useState<string | null>(null);
-  const [isFocused, setIsFocused] = useState(false);
-
-  const onFocus = () => {
-    setIsFocused(true);
-  };
-
-  const onBlur = () => {
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setIsFocused(false);
-    setError(validator(value));
+    onBlur(event);
   };
 
-  const handleChangeText = (text: string) => {
-    onChangeText(text);
-    error && setError(validator(text));
-  };
-
-  const reColor = error ? "error" : isFocused ? "accent" : "darkGray";
+  const reColor =
+    touched && error ? "error" : isFocused ? "accent" : "darkGray";
   const color = theme.colors[reColor];
 
   return (
@@ -65,8 +63,8 @@ export const TextInput = ({
           placeholder={placeholder}
           placeholderTextColor={theme.colors.darkGray}
           underlineColorAndroid="transparent"
-          onFocus={onFocus}
-          onBlur={onBlur}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           style={{
             fontFamily: theme.textVariants.label.fontFamily,
             fontSize: theme.textVariants.label.fontSize,
@@ -74,19 +72,21 @@ export const TextInput = ({
               .fontWeight as TextStyle["fontWeight"],
             flex: 1,
           }}
-          value={value}
-          onChangeText={handleChangeText}
+          autoCapitalize="none"
+          autoCorrect={false}
+          onChangeText={onChangeText}
+          {...props}
         />
 
         <Box
-          opacity={isNotEmpty(value) ? 1 : 0}
+          opacity={touched ? 1 : 0}
           alignItems="center"
           justifyContent="center"
           width={20}
           height={20}
           borderRadius="full"
           flexShrink={0}
-          backgroundColor={isNotEmpty(value) && !error ? "accent" : "error"}
+          backgroundColor={touched && error ? "error" : "accent"}
         >
           <Feather
             name={error ? "alert-circle" : "check"}
@@ -96,7 +96,7 @@ export const TextInput = ({
         </Box>
       </Box>
 
-      {error && (
+      {touched && error && (
         <Text variant="label" color="error">
           {error}
         </Text>

@@ -1,73 +1,25 @@
-import { useState } from "react";
+import { Fragment } from "react";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 import { Box } from "@/components/box";
 import { Container } from "@/components/container";
 import { Text } from "@/components/text";
-import { useTheme } from "@/theme";
 
-import { SocialLogin } from "./components/social-logins";
+import { Footer } from "./components/footer/";
 import { Button } from "@/components/button";
 import { TextInput } from "./components/form/text-input";
 import { Checkbox } from "./components/form/checkbox";
 
-const Footer = () => {
-  const theme = useTheme();
-
-  return (
-    <Box flexDirection="column" alignItems="center" gap="s">
-      <SocialLogin />
-
-      <Button
-        label="Sign up"
-        variant="link"
-        onPress={() => {
-          alert("hei there");
-        }}
-      >
-        <Box flexDirection="row" alignItems="center" justifyContent="center">
-          <Text variant="label" color="background">
-            Don't have an account?{" "}
-          </Text>
-          <Text variant="label" color="accent">
-            Sign up
-          </Text>
-        </Box>
-      </Button>
-    </Box>
-  );
-};
-
-const emailValidator = (value: string) => {
-  if (!value) {
-    return "Email is required";
-  }
-
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-  if (!emailRegex.test(value)) {
-    return "Please enter a valid email address";
-  }
-
-  return null;
-};
-
-const passwordValidator = (value: string) => {
-  if (!value) {
-    return "Password is required";
-  }
-
-  if (value.length < 8) {
-    return "Password must be at least 8 characters long";
-  }
-
-  return null;
-};
+const loginSchema = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters")
+    .required("Password is required"),
+  rememberMe: Yup.boolean().default(true),
+});
 
 export const LoginScreen = () => {
-  const [rememberMe, setRememberMe] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   return (
     <Box flex={1} backgroundColor="background">
       <Container footer={<Footer />}>
@@ -79,57 +31,83 @@ export const LoginScreen = () => {
             Use your credentials below and login to your account
           </Text>
 
-          <Box flexDirection="column" gap="m" marginBottom="m" width="100%">
-            <TextInput
-              icon="mail"
-              placeholder="Enter your email"
-              validator={emailValidator}
-              value={email}
-              onChangeText={setEmail}
-            />
-
-            <TextInput
-              icon="lock"
-              placeholder="Enter your password"
-              validator={passwordValidator}
-              value={password}
-              onChangeText={setPassword}
-            />
-          </Box>
-
-          <Box
-            flexDirection="row"
-            justifyContent="space-between"
-            width="100%"
-            marginBottom="xl"
+          <Formik
+            validationSchema={loginSchema}
+            initialValues={{ email: "", password: "", rememberMe: true }}
+            onSubmit={(values) => {
+              console.log(values);
+            }}
           >
-            <Checkbox
-              label="Remember me"
-              checked={rememberMe}
-              onChange={setRememberMe}
-            />
-            <Button
-              label="Forgot password?"
-              variant="link"
-              onPress={() => {
-                alert("login");
-              }}
-            >
-              <Text
-                variant="label"
-                color="accent"
-                textDecorationLine="underline"
-              >
-                Forgot password?
-              </Text>
-            </Button>
-          </Box>
+            {(formik) => (
+              <Fragment>
+                <Box
+                  flexDirection="column"
+                  gap="m"
+                  marginBottom="m"
+                  width="100%"
+                >
+                  <TextInput
+                    icon="mail"
+                    placeholder="Enter your email"
+                    touched={formik.touched.email}
+                    onChangeText={formik.handleChange("email")}
+                    onBlur={formik.handleBlur("email")}
+                    error={formik.errors.email}
+                    autoComplete="email"
+                  />
 
-          <Button
-            label="Log into your account"
-            onPress={() => {}}
-            variant="primary"
-          />
+                  <TextInput
+                    icon="lock"
+                    placeholder="Enter your password"
+                    touched={formik.touched.password}
+                    onChangeText={formik.handleChange("password")}
+                    onBlur={formik.handleBlur("password")}
+                    error={formik.errors.password}
+                    autoComplete="current-password"
+                  />
+                </Box>
+
+                <Box
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  width="100%"
+                  marginBottom="xl"
+                >
+                  <Checkbox
+                    label="Remember me"
+                    checked={formik.values.rememberMe}
+                    onChange={() =>
+                      formik.setFieldValue(
+                        "rememberMe",
+                        !formik.values.rememberMe
+                      )
+                    }
+                  />
+                  <Button
+                    label="Forgot password?"
+                    variant="link"
+                    onPress={() => {
+                      alert("login");
+                    }}
+                  >
+                    <Text
+                      variant="label"
+                      color="accent"
+                      textDecorationLine="underline"
+                    >
+                      Forgot password?
+                    </Text>
+                  </Button>
+                </Box>
+
+                <Button
+                  label="Log into your account"
+                  onPress={formik.handleSubmit}
+                  variant="primary"
+                />
+              </Fragment>
+            )}
+          </Formik>
         </Box>
       </Container>
     </Box>

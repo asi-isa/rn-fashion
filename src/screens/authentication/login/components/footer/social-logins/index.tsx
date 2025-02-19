@@ -4,7 +4,6 @@ import { Box } from "@/components/box";
 import { useTheme } from "@shopify/restyle";
 
 export const SocialLogin = () => {
-  const theme = useTheme();
   return (
     <Box>
       <Box flexDirection="row" justifyContent="center" gap="m">
